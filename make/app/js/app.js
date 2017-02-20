@@ -11,10 +11,7 @@ angular.module('myApp', [
     'prismic.io',
     'ngSanitize'
 ]).
-config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
-    $locationProvider.html5Mode(true);
-    $locationProvider.hashPrefix('');
-    
+config(['$routeProvider', function($routeProvider) {
     $routeProvider.when('/list/:page?', {
         templateUrl: 'partials/home.html',
         controller: 'HomeCtrl'

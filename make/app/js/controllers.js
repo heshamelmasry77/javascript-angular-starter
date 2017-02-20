@@ -13,6 +13,9 @@ angular.module('myApp.controllers', [])
 				}
 				else {
 					$scope.documents = documents;
+					documents.results.forEach(function(doc){
+						window.localStorage.setItem(doc.slug, doc.id);
+					});
 					// Angular doesn't repeat over collections created on the fly, so we have to create it here
 					if (documents.total_pages > 1) $scope.paginationRange = _.range(1, documents.total_pages+1);
 				}
@@ -20,14 +23,16 @@ angular.module('myApp.controllers', [])
 		});
 	}])
 	.controller('DocumentCtrl', ['$scope', '$routeParams', 'Prismic', '$location', function($scope, $routeParams, Prismic, $location) {
-		Prismic.document($routeParams.id).then(function(document){
+		console.log($routeParams, $routeParams.slug);
+		var id = window.localStorage.getItem($routeParams.slug);
+		Prismic.document(id).then(function(document){
 			if (document.slug === $routeParams.slug) {
 				Prismic.ctx().then(function(ctx) {
 					$scope.documentHtml = document.asHtml(ctx);
 				})
 			}
 			else if (document.slugs.indexOf($routeParams.slug) >= 0) {
-				$location.path('/document/'+document.id+'/'+document.slug);
+				$location.path('/'+document.slug);
 			}
 			else {
 				// Should display some kind of error; will just redirect to / for now
