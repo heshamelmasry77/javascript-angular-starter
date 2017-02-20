@@ -29,7 +29,7 @@ config(['$routeProvider', function($routeProvider) {
     });
 }]).
 config(['PrismicProvider', function(PrismicProvider) {
-    PrismicProvider.setApiEndpoint('https://lesbonneschoses.prismic.io/api');
+    PrismicProvider.setApiEndpoint('https://carzar.prismic.io/api');
     PrismicProvider.setAccessToken('MC5XSVg1M1NzQUFBcEJPWnhW.Te-_vWVq77-977-977-977-9au-_vXYtJO-_ve-_vRAjcxbvv73vv70w77-977-977-977-9e1hC77-977-977-9');
     PrismicProvider.setClientId('WIX53SsAALA-OZxU');
     PrismicProvider.setClientSecret('af67dbe3fdd578488b0e78e05e136783');
