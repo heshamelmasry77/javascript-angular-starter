@@ -10,15 +10,18 @@
 <h2>{{documents.total_results_size}} documents</h2>
 
 <ul id="list">
-    <li ng-repeat=" document in documents.results">
-        <a href="#/{{document.slug}}">
-            {{document.slug}}
+    <li ng-repeat=" document in documents">
+				<a href="/sell/brand/{{document.make}}/{{document.model}}" ng-if="document.is_model">
+						{{document.model}}
+				</a>
+        <a href="/sell/brand/{{document.make}}" ng-if="!document.is_model">
+            {{document.make}}
         </a>
     </li>
 </ul>
 
 <hr>
-
+<!--
 <ul id="pagination" ng-if="documents.total_pages > 1">
 	<li ng-if="documents.prev_page"><a href="#/{{(documents.page-1 > 1 ? documents.page-1 : '' )}}">Previous</a></li>
 	<li ng-repeat="i in paginationRange">
@@ -27,4 +30,4 @@
 	</li>
 	</li>
 	<li ng-if="documents.next_page"><a href="#/{{documents.page+1}}">Next</a></li>
-</ul>
+</ul> -->

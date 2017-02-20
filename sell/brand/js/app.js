@@ -14,19 +14,23 @@ angular.module('myApp', [
 config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
     $locationProvider.html5Mode(true);
     $locationProvider.hashPrefix('');
-    
+
     $routeProvider.when('/list/:page?', {
         templateUrl: 'partials/home.html',
         controller: 'HomeCtrl'
     });
-    $routeProvider.when('/:slug', {
+    $routeProvider.when('/:make', {
         templateUrl: 'partials/document.html',
-        controller: 'DocumentCtrl'
+        controller: 'MakeCtrl'
     });
-    $routeProvider.when('/search/:q*/:page?', {
-        templateUrl: 'partials/search.html',
-        controller: 'SearchCtrl'
+    $routeProvider.when('/:make/:model', {
+        templateUrl: 'partials/document.html',
+        controller: 'ModelCtrl'
     });
+    // $routeProvider.when('/search/:q*/:page?', {
+    //     templateUrl: 'partials/search.html',
+    //     controller: 'SearchCtrl'
+    // });
     $routeProvider.otherwise({
         redirectTo: '/list'
     });

@@ -13,25 +13,63 @@ angular.module('myApp.controllers', [])
 				}
 				else {
 					$scope.documents = documents;
+					var aliases = {};
 					documents.results.forEach(function(doc){
-						window.localStorage.setItem(doc.slug, doc.id);
+						var make_model = {
+							id: doc.id,
+							make: doc.slug,
+							is_model: false
+						};
+						if(undefined !== doc.fragments['model.make']){
+							make_model.is_model = true;
+							make_model.model = make_model.make;
+							make_model.make = doc.fragments['model.make'].value;
+						}
+						aliases[doc.slug] = make_model;
 					});
+					$scope.documents = aliases;
+					window.localStorage.setItem('aliases', JSON.stringify(aliases));
 					// Angular doesn't repeat over collections created on the fly, so we have to create it here
 					if (documents.total_pages > 1) $scope.paginationRange = _.range(1, documents.total_pages+1);
 				}
 			});
 		});
 	}])
-	.controller('DocumentCtrl', ['$scope', '$routeParams', 'Prismic', '$location', function($scope, $routeParams, Prismic, $location) {
-		console.log($routeParams, $routeParams.slug);
-		var id = window.localStorage.getItem($routeParams.slug);
+	.controller('MakeCtrl', ['$scope', '$routeParams', 'Prismic', '$location', function($scope, $routeParams, Prismic, $location) {
+		var make = $routeParams.make;
+		var aliases = JSON.parse(window.localStorage.getItem('aliases'));
+
+		var id = aliases[make].id;
+
 		Prismic.document(id).then(function(document){
-			if (document.slug === $routeParams.slug) {
+			console.log(document.fragments['model.make']);
+			if (document.slug === make) {
 				Prismic.ctx().then(function(ctx) {
 					$scope.documentHtml = document.asHtml(ctx);
 				})
 			}
-			else if (document.slugs.indexOf($routeParams.slug) >= 0) {
+			else if (document.slugs.indexOf(make) >= 0) {
+				$location.path('/'+document.slug);
+			}
+			else {
+				// Should display some kind of error; will just redirect to / for now
+				$location.path('/');
+			}
+		});
+	}])
+	.controller('ModelCtrl', ['$scope', '$routeParams', 'Prismic', '$location', function($scope, $routeParams, Prismic, $location) {
+		var model = $routeParams.model;
+		var aliases = JSON.parse(window.localStorage.getItem('aliases'));
+
+		var id = aliases[model].id;
+
+		Prismic.document(id).then(function(document){
+			if (document.slug === model) {
+				Prismic.ctx().then(function(ctx) {
+					$scope.documentHtml = document.asHtml(ctx);
+				})
+			}
+			else if (document.slugs.indexOf(model) >= 0) {
 				$location.path('/'+document.slug);
 			}
 			else {
